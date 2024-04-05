@@ -1,0 +1,27 @@
+version: "3.8"
+
+services:
+  http-multiplexer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8188:8188"
+    networks:
+      - worker_net
+    restart: unless-stopped
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    environment:
+      - HTTP_MAX_COUNT_URL=7
+      - HTTP_MAX_PARALLEL_REQ=4
+      - HTTP_TIMEOUT=1000
+      - SERVER_MAX_COUNT_REQ=5
+      - SERVER_PATH=/
+      - SERVER_PORT=8188
+
+networks:
+  worker_net:
